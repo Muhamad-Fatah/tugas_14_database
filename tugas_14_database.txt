@@ -1,0 +1,24 @@
+1.Jalankan MySQL server di xampp
+2.Masuk kedalam folder bin mysql : cd c:/xampp/mysql/bin
+3.Jalankan client server : MYSQL -u root
+4.Create database belajar;
+5.use belajar;
+
+6.CREATE TABLE nilai_mahasiswa (
+    -> nim CHAR(8) PRIMARY KEY,
+    -> nama VARCHAR(50),
+    -> semester_1 DECIMAL(4,2),
+    -> semester_2 DECIMAL(4,2),
+    -> semester_3 DECIMAL(4,2));
+7.CREATE TABLE ipk_mahasiswa (
+	nama_dan_nip VARCHAR(50),
+	nilai_ipk DECIMAL(4,2));
+8.DELIMITER //
+CREATE TRIGGER before_insert_nilai_mahasiswa
+BEFORE INSERT ON nilai_mahasiswa
+FOR EACH ROW
+BEGIN
+INSERT INTO ipk_mahasiswa SET
+nama_dan_nip = CONCAT_WS(" ",UPPER(NEW.nama),"(",NEW.nim,")"),
+nilai_ipk = ROUND((NEW.semester_1+NEW.semester_2+NEW.semester_3)/3,2);
+END //
